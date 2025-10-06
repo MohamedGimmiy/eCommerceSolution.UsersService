@@ -25,12 +25,36 @@ builder.Services.AddAutoMapper(cfg => {}, typeof(ApplicationUserMappingProfile).
 
 // adding fluent validations
 builder.Services.AddFluentValidationAutoValidation();
+
+//add api explorer services to swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+
+//add cors services
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(builder =>
+    {
+        builder.WithOrigins("http://localhost:4200")
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+});
+
 var app = builder.Build();
 
 //adding the middleware
 app.UseExceptionHandlingMiddleware();
 
 app.UseRouting();
+
+//adding swagger & cores 
+app.UseSwagger();
+app.UseSwaggerUI();
+app.UseCors();
+
+
 app.UseAuthentication();
 app.UseAuthorization();
 
